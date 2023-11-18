@@ -126,7 +126,7 @@ function ConRO.Hunter.Under10(_, timeShift, currentSpell, gcd, tChosen, pvpChose
 --Conditions
 	local _is_moving 																					= ConRO:PlayerSpeed();
 	local _enemies_in_melee, _target_in_melee															= ConRO:Targets("Melee");
-	local _target_in_10yrds 																			= CheckInteractDistance("target", 3);
+	local _target_in_10yrds 																			= ConRO:CheckInteractDistance("target", 3);
 
 --Warnings
 
@@ -164,7 +164,7 @@ function ConRO.Hunter.Under10Def(_, timeShift, currentSpell, gcd, tChosen, pvpCh
 --Conditions
 	local _is_moving 																					= ConRO:PlayerSpeed();
 	local _enemies_in_melee, _target_in_melee															= ConRO:Targets("Melee");
-	local _target_in_10yrds 																			= CheckInteractDistance("target", 3);
+	local _target_in_10yrds 																			= ConRO:CheckInteractDistance("target", 3);
 
 --Warnings
 
@@ -201,8 +201,8 @@ function ConRO.Hunter.BeastMastery(_, timeShift, currentSpell, gcd, tChosen, pvp
 --Abilities	
 	local _AMurderofCrows, _AMurderofCrows_RDY = ConRO:AbilityReady(Ability.AMurderofCrows, timeShift);
 	local _ArcaneShot, _ArcaneShot_RDY = ConRO:AbilityReady(Ability.ArcaneShot, timeShift);
-	local _AspectoftheWild, _AspectoftheWild_RDY, _AspectoftheWild_CD = ConRO:AbilityReady(Ability.AspectoftheWild, timeShift);
-		local _AspectoftheWild_BUFF = ConRO:Aura(Buff.AspectoftheWild, timeShift);
+	-- local _AspectoftheWild, _AspectoftheWild_RDY, _AspectoftheWild_CD = ConRO:AbilityReady(Ability.AspectoftheWild, timeShift);
+	-- local _AspectoftheWild_BUFF = ConRO:Aura(Buff.AspectoftheWild, timeShift);
 	local _BarbedShot, _BarbedShot_RDY, _BarbedShot_CD = ConRO:AbilityReady(Ability.BarbedShot, timeShift);
 		local _BarbedShot_CHARGES, _BarbedShot_MaxCHARGES, _BarbedShot_CCD, _BarbedShot_MCCD = ConRO:SpellCharges(_BarbedShot);
 		local _Frenzy_BUFF, _Frenzy_COUNT, _Frenzy_DUR = ConRO:UnitAura(Buff.Frenzy, timeShift, 'pet');
@@ -255,12 +255,13 @@ function ConRO.Hunter.BeastMastery(_, timeShift, currentSpell, gcd, tChosen, pvp
 	ConRO:AbilityPurge(_TranquilizingShot, _TranquilizingShot_RDY and ConRO:Purgable());
 
 	ConRO:AbilityBurst(_AMurderofCrows, _AMurderofCrows_RDY and _in_combat and ConRO:BurstMode(_AMurderofCrows));
-	ConRO:AbilityBurst(_AspectoftheWild, _AspectoftheWild_RDY and _in_combat and ConRO:BurstMode(_AspectoftheWild));
+	-- ConRO:AbilityBurst(_AspectoftheWild, _AspectoftheWild_RDY and _in_combat and ConRO:BurstMode(_AspectoftheWild));
 	ConRO:AbilityBurst(_BestialWrath, _BestialWrath_RDY and _in_combat and ConRO:BurstMode(_BestialWrath));
 	ConRO:AbilityBurst(_Bloodshed, _Bloodshed_RDY and _in_combat and ConRO:BurstMode(_Bloodshed));
 	ConRO:AbilityBurst(_CalloftheWild, _CalloftheWild_RDY and _in_combat and ConRO:BurstMode(_CalloftheWild));
 	ConRO:AbilityBurst(_DeathChakram, _DeathChakram_RDY and _in_combat and ConRO:BurstMode(_DeathChakram));
-	ConRO:AbilityBurst(_Stampede, _Stampede_RDY and ((_BestialWrath_BUFF and _AspectoftheWild_BUFF) or (_AspectoftheWild_BUFF and _in_combat)) and ConRO:BurstMode(_Stampede));
+	-- ConRO:AbilityBurst(_Stampede, _Stampede_RDY and ((_BestialWrath_BUFF and _AspectoftheWild_BUFF) or (_AspectoftheWild_BUFF and _in_combat)) and ConRO:BurstMode(_Stampede));
+	ConRO:AbilityBurst(_Stampede, _Stampede_RDY and ((_BestialWrath_BUFF)) and ConRO:BurstMode(_Stampede));
 	ConRO:AbilityBurst(_PrimalRage, _PrimalRage_RDY and _party_size <= 1 and _in_combat and not _Heroism_BUFF and not _Sated_DEBUFF);
 	ConRO:AbilityBurst(_PrimalRageCR, _PrimalRage_RDY and _party_size <= 1 and _in_combat and not _Heroism_BUFF and not _Sated_DEBUFF);
 
@@ -410,10 +411,10 @@ function ConRO.Hunter.BeastMastery(_, timeShift, currentSpell, gcd, tChosen, pvp
 			_KillShot_RDY = false;
 		end
 
-		if _AspectoftheWild_RDY and ConRO:FullMode(_AspectoftheWild) then
-			tinsert(ConRO.SuggestedSpells, _AspectoftheWild);
-			_AspectoftheWild_RDY = false;
-		end
+		-- if _AspectoftheWild_RDY and ConRO:FullMode(_AspectoftheWild) then
+		-- 	tinsert(ConRO.SuggestedSpells, _AspectoftheWild);
+		-- 	_AspectoftheWild_RDY = false;
+		-- end
 
 		if _CobraShot_RDY then
 			tinsert(ConRO.SuggestedSpells, _CobraShot);
@@ -455,7 +456,7 @@ function ConRO.Hunter.BeastMasteryDef(_, timeShift, currentSpell, gcd, tChosen, 
 --Conditions
 	local _is_moving 																					= ConRO:PlayerSpeed();
 	local _enemies_in_melee, _target_in_melee															= ConRO:Targets("Melee");
-	local _target_in_10yrds 																			= CheckInteractDistance("target", 3);
+	local _target_in_10yrds 																			= ConRO:CheckInteractDistance("target", 3);
 
 	local _Pet_summoned 																				= ConRO:CallPet();
 	local _Pet_assist 																					= ConRO:PetAssist();
@@ -763,7 +764,7 @@ function ConRO.Hunter.MarksmanshipDef(_, timeShift, currentSpell, gcd, tChosen, 
 --Conditions
 	local _is_moving = ConRO:PlayerSpeed();
 	local _enemies_in_melee, _target_in_melee = ConRO:Targets("Melee");
-	local _target_in_10yrds = CheckInteractDistance("target", 3);
+	local _target_in_10yrds = ConRO:CheckInteractDistance("target", 3);
 
 	local _Pet_summoned = ConRO:CallPet();
 	local _Pet_assist = ConRO:PetAssist();
@@ -874,7 +875,7 @@ function ConRO.Hunter.Survival(_, timeShift, currentSpell, gcd, tChosen, pvpChos
 --Conditions
 	local _is_moving 																					= ConRO:PlayerSpeed();
 	local _enemies_in_melee, _target_in_melee															= ConRO:Targets("Melee");
-	local _target_in_10yrds 																			= CheckInteractDistance("target", 3);
+	local _target_in_10yrds 																			= ConRO:CheckInteractDistance("target", 3);
 	local _can_execute																					= _Target_Percent_Health <= 20;
 
 	local _Pet_summoned 																				= ConRO:CallPet();
@@ -1139,7 +1140,7 @@ function ConRO.Hunter.SurvivalDef(_, timeShift, currentSpell, gcd, tChosen, pvpC
 --Conditions
 	local _is_moving 																					= ConRO:PlayerSpeed();
 	local _enemies_in_melee, _target_in_melee															= ConRO:Targets("Melee");
-	local _target_in_10yrds 																			= CheckInteractDistance("target", 3);
+	local _target_in_10yrds 																			= ConRO:CheckInteractDistance("target", 3);
 
 	local _Pet_summoned 																				= ConRO:CallPet();
 	local _Pet_assist 																					= ConRO:PetAssist();
